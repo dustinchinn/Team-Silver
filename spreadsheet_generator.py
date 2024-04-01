@@ -2,7 +2,7 @@ import streamlit as st
 import os
 from openai import OpenAI
 
-client = OpenAI(api_key=('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'))
+client = OpenAI(api_key=('Your API key here'))
 
 def create_spreadsheet(noise_data):
     # Construct the prompt for the OpenAI API
