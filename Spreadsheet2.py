@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime
 import io
 from openai import OpenAI
-client = OpenAI(api_key='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')
+client = OpenAI('your key API')
 
 def main():
     st.title('Noise Data Spreadsheet Creator')
