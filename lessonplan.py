@@ -4,14 +4,14 @@ import streamlit as st
 from openai import OpenAI
 
 # Set up your OpenAI API key
-client = OpenAI(api_key="INSERT-API-KEY-HERE")
+client = OpenAI(api_key="API Key Here")
 
 # Create a wrapper function to get OpenAI completion
 def get_completion(prompt, model="gpt-3.5-turbo"):
     completion = client.chat.completions.create(
         model=model,
         messages=[
-        {"role": "system", "content": 'You are a helpful assistant. Write a lesson on the effects of exposure to high noise levels. The lesson should cover short-term and long-term effects as well as ways to mitigate loud noise and its effects. Come up with some examples that show common effects of noise exposure and solutions to remedy the effects.'},
+        {"role": "system", "content": 'You are a helpful chatbot. Answer any questions about the effects of exposure to high noise levels and noise in general. If asked a question not related to noise or sound, apologize and ask for another question.'},
         {"role": "user", "content": prompt},
         ]
     )
