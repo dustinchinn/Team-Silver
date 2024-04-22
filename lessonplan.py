@@ -29,29 +29,31 @@ with st.form(key="noise_query"):
     if submitted and prompt:
         st.write("Fetching information...")
         st.write(get_completion(prompt))
+        st.success("Great! Fetching information successful!")
 
+# DISCARD THIS TO MAKE IT LESS MESSY
 # Display educational information on noise exposure
-st.header("Educational Information")
-st.subheader("Short-term Effects of Noise Exposure")
-st.write("""
-- Temporary hearing loss or tinnitus
-- Increased stress levels
-- Sleep disturbances
-""")
+# st.header("Educational Information")
+# st.subheader("Short-term Effects of Noise Exposure")
+# st.write("""
+# - Temporary hearing loss or tinnitus
+# - Increased stress levels
+# - Sleep disturbances
+# """)
 
-st.subheader("Long-term Effects of Noise Exposure")
-st.write("""
-- Permanent hearing loss
-- Cardiovascular issues
-- Cognitive impairment
-""")
+# st.subheader("Long-term Effects of Noise Exposure")
+# st.write("""
+# - Permanent hearing loss
+# - Cardiovascular issues
+# - Cognitive impairment
+# """)
 
-st.subheader("Solutions to Noise Issues")
-st.write("""
-- Use of earplugs or noise-canceling headphones
-- Implementing noise reduction strategies in the workplace
-- Regular hearing check-ups
-""")
+# st.subheader("Solutions to Noise Issues")
+# st.write("""
+# - Use of earplugs or noise-canceling headphones
+# - Implementing noise reduction strategies in the workplace
+# - Regular hearing check-ups
+# """)
 
 # Add a sidebar with additional resources
 st.sidebar.header("Additional Resources")
