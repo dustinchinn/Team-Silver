@@ -4,7 +4,7 @@ import streamlit as st
 from openai import OpenAI
 
 # Set up your OpenAI API key
-client = OpenAI(api_key="API Key Here")
+client = OpenAI(api_key="OPEN API KEY")
 
 # Create a wrapper function to get OpenAI completion
 def get_completion(prompt, model="gpt-3.5-turbo"):
@@ -27,12 +27,22 @@ with st.form(key="noise_query"):
     submitted = st.form_submit_button("Submit")
 
     if submitted and prompt:
-        st.write("Fetching information...")
-        st.write(get_completion(prompt))
-        st.success("Great! Fetching information successful!")
+        # Create a placeholder for the info message
+        info_placeholder = st.empty()
 
-# DISCARD THIS TO MAKE IT LESS MESSY
-# Display educational information on noise exposure
+        # Display the "Fetching information..." message in the placeholder
+        info_placeholder.info("Fetching information...")
+
+        # Get the completion and overwrite the info message with the result
+        completion = get_completion(prompt)
+        
+        # Overwrite the info message with a success message
+        info_placeholder.success("Information fetched successfully!")
+
+        # Display the completion
+        st.write(completion)
+
+# # Display educational information on noise exposure
 # st.header("Educational Information")
 # st.subheader("Short-term Effects of Noise Exposure")
 # st.write("""
