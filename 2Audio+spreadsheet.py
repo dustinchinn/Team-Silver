@@ -36,12 +36,23 @@ def record_audio(duration=5, sample_rate=44100, channels=1, format=pyaudio.paInt
 
     return db_level
 
-def append_to_csv(data, filename="noise_data.csv"):
-    # Check if file exists, create with header if it doesn't
-    if not os.path.isfile(filename):
-        pd.DataFrame(columns=data[0].keys()).to_csv(filename, index=False)
-    # Append new data entries
-    pd.DataFrame(data).to_csv(filename, mode='a', header=False, index=False)
+def append_to_csv(data_list, filename="noise_data.csv"):
+    """Appends a list of data entries (each a dictionary) to a CSV file, with headers if the file does not exist."""
+    import pandas as pd
+    import os
+
+    if not os.path.isfile(filename) or os.stat(filename).st_size == 0:
+        # File does not exist or is empty, initialize it with headers from the first data entry
+        pd.DataFrame(data_list).to_csv(filename, index=False)
+    else:
+        # File exists, append data without writing headers
+        current_df = pd.read_csv(filename)
+        new_df = pd.DataFrame(data_list)
+        next_order_number = len(current_df) + 1
+        new_df['Order Number'] = range(next_order_number, next_order_number + len(new_df))
+        cols = ['Order Number'] + [col for col in new_df.columns if col != 'Order Number']
+        new_df = new_df[cols]
+        new_df.to_csv(filename, mode='a', header=False, index=False)
 
 def get_location():
     try:
@@ -63,12 +74,6 @@ def main():
     if 'category' not in st.session_state:
         st.session_state['category'] = None  # Initialize session state for category
 
-    # Enabling the "Please specify" field based on category selection
-    if category == "Other":
-        specific_category = st.text_input("Please specify")
-    else:
-        specific_category = ""  # Reset or keep empty if not 'Other'
-
     with st.form("noise_data_form"):
         col1, col2 = st.columns(2)
         with col1:
@@ -89,10 +94,8 @@ def main():
             location = get_location()  # Fetch location using the defined function
             location_input = st.text_input('Location', value=location if location else 'Enter location manually')
         with col2:
-            category_options = ["Loud music", "Construction", "Traffic", "Parties", "Animals / Pets", "Industrial machinery", "Airplanes", "Public transport", "Other"]
+            category_options = ["Loud music", "Construction", "Traffic", "Parties", "Animals / Pets", "Industrial machinery", "Airplanes", "Public transport", "Other (Please specify in comments)"]
             category = st.selectbox("Category", category_options)
-            # Disabled input field that activates when 'Other' is selected
-            specific_category = st.text_input("Please specify", value='', disabled=category != "Other")
 
         comments = st.text_area('Comments')
         record_button = st.form_submit_button("Record")
@@ -113,12 +116,11 @@ def main():
         db_level = record_audio(duration=5)
         
         # Append the data to session state
-        final_category = specific_category if st.session_state.category == "Other" else st.session_state.category
         st.session_state.noise_data.append({
             "dB Level": db_level,
             "Timestamp": timestamp_str,
             "Location": location_input,
-            "Category": final_category,
+            "Category": category,
             "Comments": comments
         })
         st.success("Recording successful and data recorded.")
