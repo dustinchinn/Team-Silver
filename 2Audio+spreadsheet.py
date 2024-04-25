@@ -112,9 +112,14 @@ def main():
         timestamp = timestamp.replace(hour=hour_number, minute=int(time_selection.split(':')[1][:2]))
         timestamp_str = timestamp.strftime('%m/%d/%Y %H:%M')
 
-        st.info("Recording started. Please wait for 5 seconds.")
+        # Create a placeholder for the message
+        message = st.empty()
+        message.info("Recording started. Please wait for 5 seconds.")
         db_level = record_audio(duration=5)
-        
+    
+        # Update the message in the placeholder
+        message.success("Recording successful and data recorded.")
+
         # Append the data to session state
         st.session_state.noise_data.append({
             "dB Level": db_level,
@@ -123,7 +128,6 @@ def main():
             "Category": category,
             "Comments": comments
         })
-        st.success("Recording successful and data recorded.")
 
     # Display and manage current data entries
     if st.session_state.noise_data:
