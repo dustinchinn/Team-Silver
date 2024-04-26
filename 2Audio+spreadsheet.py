@@ -109,7 +109,7 @@ def main():
     # Display the rest of the application only if agreed
     if st.session_state.agreed:
         st.info("Hello, Welcome to Sound X.\n "
-                "Please enter the details and click 'Record' to start recording for 5 seconds.")
+                "Please enter the details and click 'Record' to start recording.")
 
         with st.form("noise_data_form"):
             col1, col2 = st.columns(2)
