@@ -1,15 +1,14 @@
 import streamlit as st
 import pandas as pd
-from datetime import datetime, time as datetime_time
+from datetime import datetime
 import pyaudio
 import numpy as np
 import time
 import os
 import requests
-import openai
 from openai import OpenAI
 
-client = OpenAI(api_key="Your API key")
+client = OpenAI(api_key="Your API Key")
 # Create a wrapper function to get OpenAI completion
 def get_completion(prompt, model="gpt-3.5-turbo"):
     completion = client.chat.completions.create(
@@ -51,22 +50,18 @@ def record_audio(duration=5, sample_rate=44100, channels=1, format=pyaudio.paInt
     return db_level
 
 def append_to_csv(data_list, filename="noise_data.csv"):
+    # Check if the file exists and is not empty
     if not os.path.isfile(filename) or os.stat(filename).st_size == 0:
-        for i, data in enumerate(data_list):
-            data['Order Number'] = i + 1  
-        pd.DataFrame(data_list).to_csv(filename, index=False)
+        # If file doesn't exist or is empty, write with header and starting 'Entry' from 1
+        with open(filename, 'w', newline='') as f:  # Ensure correct line handling on Windows
+            pd.DataFrame([{'Entry': i + 1, **data} for i, data in enumerate(data_list)]).to_csv(f, index=False)
     else:
+        # If file exists, read the current data to find the last 'Entry' number
         current_df = pd.read_csv(filename)
-        if 'Order Number' in current_df.columns:
-            next_order_number = current_df['Order Number'].max() + 1
-        else:
-            next_order_number = 1
-        for i, data in enumerate(data_list):
-            data['Order Number'] = next_order_number + i
-        new_df = pd.DataFrame(data_list)
-        cols = ['Order Number'] + [col for col in new_df.columns if col != 'Order Number']
-        new_df = new_df[cols]
-        new_df.to_csv(filename, mode='a', header=False, index=False)
+        max_entry = current_df['Entry'].max() if 'Entry' in current_df.columns else 0
+        # Append new data with incremented 'Entry' numbers
+        with open(filename, 'a', newline='') as f:  # Append mode, ensure correct line handling on Windows
+            pd.DataFrame([{'Entry': max_entry + i + 1, **data} for i, data in enumerate(data_list)]).to_csv(f, header=False, index=False)
 
 def get_location():
     try:
@@ -80,7 +75,7 @@ def get_location():
 
 def main():
     st.title("Sound X - Noise Data Recorder")
-
+    st.subheader("Welcome to Sound X, a tool to record, report, and educate about noise data.", divider='grey')
     # Initialize agreement status in session state if not already present
     if 'agreed' not in st.session_state:
         st.session_state.agreed = False
@@ -101,16 +96,15 @@ def main():
         agree, disagree = st.columns(2)
         if agree.button("Agree"):
             st.session_state.agreed = True  # Update state to reflect agreement
-            st.experimental_rerun()  # Force a rerun to refresh the page
+            st.rerun()  # Force a rerun to refresh the page
         if disagree.button("Disagree"):
             st.error("You have chosen not to agree to the terms. Please close this tab or refresh to exit.")
             st.stop()  # Stop execution to prevent any further interaction
 
     # Display the rest of the application only if agreed
     if st.session_state.agreed:
-        st.info("Hello, Welcome to Sound X.\n "
-                "Please enter the details and click 'Record' to start recording.")
-
+        st.info("Please enter the details and click 'Record' to start recording.")
+        st.subheader("Record Noise Data", divider='grey')
         with st.form("noise_data_form"):
             col1, col2 = st.columns(2)
             with col1:
@@ -184,7 +178,9 @@ def display_current_data():
 
                 # Display the completion
                 st.write(completion)
-     
+            st.info("Still have questions? Please click the 'Chat' button below.")
+            st.page_link("pages/testing.py", label="Chat", icon="💬")
+
 if __name__ == "__main__":
     main()
     
