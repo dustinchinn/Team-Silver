@@ -6,6 +6,20 @@ import numpy as np
 import time
 import os
 import requests
+import openai
+from openai import OpenAI
+
+client = OpenAI(api_key="Your key here")
+# Create a wrapper function to get OpenAI completion
+def get_completion(prompt, model="gpt-3.5-turbo"):
+    completion = client.chat.completions.create(
+        model=model,
+        messages=[
+        {"role": "system", "content": 'You are a helpful chatbot. Thank the user for their report, then provide a suggestion based on their prompt.'},
+        {"role": "user", "content": prompt},
+        ]
+    )
+    return completion.choices[0].message.content
 
 def calculate_dbs(data, sample_rate):
     rms = np.sqrt(np.mean(data ** 2))
@@ -66,61 +80,91 @@ def get_location():
 
 def main():
     st.title("Sound X - Noise Data Recorder")
-    st.info("Please enter the details and click 'Record' to start recording for 5 seconds.")
 
+    # Initialize agreement status in session state if not already present
+    if 'agreed' not in st.session_state:
+        st.session_state.agreed = False
+
+    # Conditionally display the disclaimer and buttons based on agreement status
+    if not st.session_state.agreed:
+        # Display disclaimer using HTML for emphasis
+        st.markdown(""" <div style='background-color: white; padding: 10px; border-radius: 5px;'>
+                        <h2 style='color: red; text-align: center;'>Disclaimer</h2>
+                        <p style='color: black; font-weight: bold;'>
+                            By using this tool, you agree to allow this app to use your device's microphone and location 
+                            to generate noise reports. This specific user data will <strong>not</strong> be distributed.
+                        </p>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+        # Display Agree and Disagree buttons
+        agree, disagree = st.columns(2)
+        if agree.button("Agree"):
+            st.session_state.agreed = True  # Update state to reflect agreement
+            st.experimental_rerun()  # Force a rerun to refresh the page
+        if disagree.button("Disagree"):
+            st.error("You have chosen not to agree to the terms. Please close this tab or refresh to exit.")
+            st.stop()  # Stop execution to prevent any further interaction
+
+    # Display the rest of the application only if agreed
+    if st.session_state.agreed:
+        st.info("Hello, Welcome to Sound X.\n "
+                "Please enter the details and click 'Record' to start recording for 5 seconds.")
+
+        with st.form("noise_data_form"):
+            col1, col2 = st.columns(2)
+            with col1:
+                # Automatically capture the current date
+                current_date = datetime.now().strftime('%m/%d/%Y')
+                st.text(f"Date: {current_date}")
+            with col2:
+                # Automatically capture the current time
+                current_time = datetime.now().strftime('%I:%M %p')
+                st.text(f"Time: {current_time}")
+
+            col1, col2 = st.columns(2)
+            with col1:
+                location = get_location()  # Fetch location using the defined function
+                location_input = st.text_input('Location', value=location if location else 'Enter location manually')
+            with col2:
+                category_options = ["Loud music", "Construction", "Traffic", "Parties", "Animals / Pets", "Industrial machinery", "Airplanes", "Public transport", "Other (Please specify in comments)"]
+                category = st.selectbox("Category", category_options)
+
+            comments = st.text_area('Comments')
+            record_button = st.form_submit_button("Record")
+
+        if record_button:
+            # Process after recording button is pressed
+            process_recording(location_input, category, comments)
+
+        # Display and manage current data entries
+        display_current_data()
+
+
+def process_recording(location_input, category, comments):
+    current_date = datetime.now().strftime('%m/%d/%Y')
+    current_time = datetime.now().strftime('%I:%M %p')
+    timestamp_str = f"{current_date} {current_time}"
+    # Placeholder for actual recording function
+    with st.spinner('Recording in progress...'):
+     db_level = record_audio(duration=5)
+     st.success("Recording successful and data recorded.")
+    
+    # Append the data to session state
+    st.session_state.noise_data.append({
+        "dB Level": db_level,
+        "Timestamp": timestamp_str,
+        "Location": location_input,
+        "Category": category,
+        "Comments": comments
+    })
+
+def display_current_data():
     if "noise_data" not in st.session_state:
         st.session_state.noise_data = []
-    
-    if 'category' not in st.session_state:
-        st.session_state['category'] = None  # Initialize session state for category
-
-    with st.form("noise_data_form"):
-        col1, col2 = st.columns(2)
-        with col1:
-            # Automatically capture the current date
-            current_date = datetime.now().strftime('%m/%d/%Y')  
-            st.text(f"Date: {current_date}")
-        with col2:
-            # Automatically capture the current time
-            current_time = datetime.now().strftime('%I:%M %p')  
-            st.text(f"Time: {current_time}")
-        col1, col2 = st.columns(2)
-        with col1:
-            location = get_location()  # Fetch location using the defined function
-            location_input = st.text_input('Location', value=location if location else 'Enter location manually')
-        with col2:
-            category_options = ["Loud music", "Construction", "Traffic", "Parties", "Animals / Pets", "Industrial machinery", "Airplanes", "Public transport", "Other (Please specify in comments)"]
-            category = st.selectbox("Category", category_options)
-
-        comments = st.text_area('Comments')
-        record_button = st.form_submit_button("Record")
-
-    if record_button:
-        current_date = datetime.now().strftime('%m/%d/%Y')
-        current_time = datetime.now().strftime('%I:%M %p')
-        timestamp_str = f"{current_date} {current_time}"
-        
-        # Create a placeholder for the message
-        message = st.empty()
-        message.info("Recording started. Please wait for 5 seconds.")
-        db_level = record_audio(duration=5)
-    
-        # Update the message in the placeholder
-        message.success("Recording successful and data recorded.")
-
-        # Append the data to session state
-        st.session_state.noise_data.append({
-            "dB Level": db_level,
-            "Timestamp": timestamp_str,
-            "Location": location_input,
-            "Category": category,
-            "Comments": comments
-        })
-
-    # Display and manage current data entries
     if st.session_state.noise_data:
+        st.info("Click the 'X' button to delete and record again if needed.")
         st.write("Current Data Entries:")
-        st.info("Click 'X' to delete an entry. Then click 'Report' when you are done recording all the data.")
         for i, entry in enumerate(st.session_state.noise_data):
             col1, col2 = st.columns([0.9, 0.1])
             with col1:
@@ -133,7 +177,14 @@ def main():
                 append_to_csv(st.session_state.noise_data)
                 st.success("Data reported successfully and added to the central file.")
                 st.session_state.noise_data = [] 
+                prompt = f"{entry['dB Level']}\n{entry['Timestamp']}\n{entry['Location']}\n{entry['Category']}\n{entry['Comments']}"
     
+                # Get the completion and overwrite the info message with the result
+                completion = get_completion(prompt)
 
+                # Display the completion
+                st.write(completion)
+     
 if __name__ == "__main__":
     main()
+    
