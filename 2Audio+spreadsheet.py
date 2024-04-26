@@ -9,7 +9,7 @@ import requests
 import openai
 from openai import OpenAI
 
-client = OpenAI(api_key="Your key here")
+client = OpenAI(api_key="Your API key")
 # Create a wrapper function to get OpenAI completion
 def get_completion(prompt, model="gpt-3.5-turbo"):
     completion = client.chat.completions.create(
