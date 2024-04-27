@@ -8,23 +8,23 @@ import os
 import requests
 from openai import OpenAI
 
-client = OpenAI(api_key="Your API Key")
+client = OpenAI(api_key="Your API here")
 # Create a wrapper function to get OpenAI completion
 def get_completion(prompt, model="gpt-3.5-turbo"):
     completion = client.chat.completions.create(
         model=model,
         messages=[
-        {"role": "system", "content": 'You are a helpful chatbot. Thank the user for their report, then provide a suggestion based on their prompt.'},
+        {"role": "system", "content": 'You are a helpful chatbot. Thank the user for their report, then provide a suggestion based on their prompt. Including this "Still have questions? Please click the "Chat" button below."'},
         {"role": "user", "content": prompt},
         ]
     )
     return completion.choices[0].message.content
-
+#Calculate a dB level from audio data
 def calculate_dbs(data, sample_rate):
     rms = np.sqrt(np.mean(data ** 2))
     db_level = 20 * np.log10(rms)
     return db_level
-
+#Record audio using PyAudio
 def record_audio(duration=5, sample_rate=44100, channels=1, format=pyaudio.paInt16):
     p = pyaudio.PyAudio()
     stream = p.open(format=format,
@@ -75,7 +75,7 @@ def get_location():
 
 def main():
     st.title("Sound X - Noise Data Recorder")
-    st.subheader("Welcome to Sound X, a tool to record, report, and educate about noise data.", divider='grey')
+    st.subheader("Welcome to Sound X, a tool to record and report noise data.", divider='grey')
     # Initialize agreement status in session state if not already present
     if 'agreed' not in st.session_state:
         st.session_state.agreed = False
@@ -143,6 +143,7 @@ def process_recording(location_input, category, comments):
     with st.spinner('Recording in progress...'):
      db_level = record_audio(duration=5)
      st.success("Recording successful and data recorded.")
+
     
     # Append the data to session state
     st.session_state.noise_data.append({
@@ -177,8 +178,7 @@ def display_current_data():
                 completion = get_completion(prompt)
 
                 # Display the completion
-                st.write(completion)
-            st.info("Still have questions? Please click the 'Chat' button below.")
+                st.success(completion)
             st.page_link("pages/testing.py", label="Chat", icon="💬")
 
 if __name__ == "__main__":
