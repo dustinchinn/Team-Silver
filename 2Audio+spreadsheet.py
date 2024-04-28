@@ -74,8 +74,11 @@ def get_location():
         return None
 
 def main():
-    st.title("Sound X - Noise Data Recorder")
-    st.subheader("Welcome to Sound X, a tool to record and report noise data.", divider='grey')
+    st.image('logo.png', use_column_width=True)
+    st.subheader("Welcome to :blue[Sound X],")
+    st.subheader("This is a tool to record, report noise data and get information about noise exposure.")
+    st.subheader(' ', divider='grey')
+    
     # Initialize agreement status in session state if not already present
     if 'agreed' not in st.session_state:
         st.session_state.agreed = False
@@ -121,7 +124,7 @@ def main():
                 location = get_location()  # Fetch location using the defined function
                 location_input = st.text_input('Location', value=location if location else 'Enter location manually')
             with col2:
-                category_options = ["Loud music", "Construction", "Traffic", "Parties", "Animals / Pets", "Industrial machinery", "Airplanes", "Public transport", "Other (Please specify in comments)"]
+                category_options = ["Loud music", "Construction", "Traffic", "Party", "Animal / Pet", "Industrial machinery", "Airplanes", "Public transport", "Other (Please specify in comments)"]
                 category = st.selectbox("Category", category_options)
 
             comments = st.text_area('Comments')
