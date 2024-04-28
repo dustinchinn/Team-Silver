@@ -8,17 +8,18 @@ import os
 import requests
 from openai import OpenAI
 
-client = OpenAI(api_key="Your API here")
+client = OpenAI(api_key="Your key API")
 # Create a wrapper function to get OpenAI completion
 def get_completion(prompt, model="gpt-3.5-turbo"):
     completion = client.chat.completions.create(
         model=model,
         messages=[
-        {"role": "system", "content": 'You are a helpful chatbot. Thank the user for their report, then provide a suggestion based on their prompt. Including this "Still have questions? Please click the "Chat" button below."'},
+        {"role": "system", "content": 'You are a helpful chatbot. Thank the user for their report, then provide a suggestion based on their prompt. Provide link to their local police department. Finally, including this at the end "Still have questions? Please click the "Chat" button below."'},
         {"role": "user", "content": prompt},
         ]
     )
     return completion.choices[0].message.content
+
 #Calculate a dB level from audio data
 def calculate_dbs(data, sample_rate):
     rms = np.sqrt(np.mean(data ** 2))
@@ -161,15 +162,31 @@ def display_current_data():
     if "noise_data" not in st.session_state:
         st.session_state.noise_data = []
     if st.session_state.noise_data:
-        st.info("Click the 'X' button to delete and record again if needed.")
-        st.write("Current Data Entries:")
+        st.info("Review your noise report below. You can delete entry, edit comments and category before submitting.")
         for i, entry in enumerate(st.session_state.noise_data):
-            col1, col2 = st.columns([0.9, 0.1])
+            st.markdown("### Noise Report")
+            st.markdown(f"**dB Level:** {entry['dB Level']} dB")
+            st.markdown(f"**Date and Time:** {entry['Timestamp']}")
+            st.markdown(f"**Location:** {entry['Location']}")
+            st.markdown(f"**Category:** {entry['Category']}")
+            st.markdown(f"**Comments:** {entry['Comments']}")        
+            col1, col2 = st.columns([0.5, 0.5])
             with col1:
-                st.write(f"{i+1}. {entry['dB Level']} dB, {entry['Timestamp']}, {entry['Location']}, {entry['Category']}, {entry['Comments']}")
+                # Use a popover for editing
+                category_options = ["Loud music", "Construction", "Traffic", "Party", "Animal / Pet", "Industrial machinery", "Airplanes", "Public transport", "Other (Please specify in comments)"]
+
+                with st.popover("Edit"):
+                    edited_comments = st.text_area("Comments", value=entry["Comments"])
+                    edited_category = st.selectbox("Category", ["Loud music", "Construction", "Traffic", "Party", "Animal / Pet", "Industrial machinery", "Airplanes", "Public transport", "Other (Please specify in comments)"], index=category_options.index(entry['Category']))
+                    if st.button("Save Changes"):
+                        # Update the session state with edited values
+                        st.session_state.noise_data[i]["Comments"] = edited_comments
+                        st.session_state.noise_data[i]["Category"] = edited_category
+                        st.experimental_rerun()
             with col2:
                 if st.button("X", key=f"delete_{i}"):
-                    st.session_state.noise_data.pop(i)
+                  st.session_state.noise_data.pop(i)
+                  st.experimental_rerun()
         if st.button('Report'):
             if st.session_state.noise_data:
                 append_to_csv(st.session_state.noise_data)
@@ -182,7 +199,7 @@ def display_current_data():
 
                 # Display the completion
                 st.success(completion)
-            st.page_link("pages/testing.py", label="Chat", icon="💬")
+                st.page_link("pages/testing.py", label="Chat", icon="💬")
 
 if __name__ == "__main__":
     main()
