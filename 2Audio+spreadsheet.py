@@ -8,13 +8,13 @@ import os
 import requests
 from openai import OpenAI
 
-client = OpenAI(api_key="Your key API")
+client = OpenAI(api_key="Your API key")
 # Create a wrapper function to get OpenAI completion
 def get_completion(prompt, model="gpt-3.5-turbo"):
     completion = client.chat.completions.create(
         model=model,
         messages=[
-        {"role": "system", "content": 'You are a helpful chatbot. Thank the user for their report, then provide a suggestion based on their prompt. Provide link to their local police department. Finally, including this at the end "Still have questions? Please click the "Chat" button below."'},
+        {"role": "system", "content": 'You are a helpful chatbot. Thank the user for their report, then provide a suggestion based on their prompt. Provide link to their local authority. Finally, including this at the end "Still have questions? Please click the "Chat" button below."'},
         {"role": "user", "content": prompt},
         ]
     )
@@ -75,10 +75,7 @@ def get_location():
         return None
 
 def main():
-    st.image('logo.png', use_column_width=True)
-    st.subheader("Welcome to :blue[Sound X],")
-    st.subheader("This is a tool to record, report noise data and get information about noise exposure.")
-    st.subheader(' ', divider='grey')
+    
     
     # Initialize agreement status in session state if not already present
     if 'agreed' not in st.session_state:
@@ -87,6 +84,10 @@ def main():
     # Conditionally display the disclaimer and buttons based on agreement status
     if not st.session_state.agreed:
         # Display disclaimer using HTML for emphasis
+        st.image('logo.png', use_column_width=True)
+        st.subheader("Welcome to :blue[Sound X],")
+        st.subheader("This is a tool to record, report noise data and get information about noise exposure.")
+        st.subheader(' ', divider='grey')
         st.markdown(""" <div style='background-color: white; padding: 10px; border-radius: 5px;'>
                         <h2 style='color: red; text-align: center;'>Disclaimer</h2>
                         <p style='color: black; font-weight: bold;'>
@@ -170,7 +171,7 @@ def display_current_data():
             st.markdown(f"**Location:** {entry['Location']}")
             st.markdown(f"**Category:** {entry['Category']}")
             st.markdown(f"**Comments:** {entry['Comments']}")        
-            col1, col2 = st.columns([0.5, 0.5])
+            col1, col2 = st.columns([0.5, 0.1])
             with col1:
                 # Use a popover for editing
                 category_options = ["Loud music", "Construction", "Traffic", "Party", "Animal / Pet", "Industrial machinery", "Airplanes", "Public transport", "Other (Please specify in comments)"]
@@ -199,7 +200,7 @@ def display_current_data():
 
                 # Display the completion
                 st.success(completion)
-                st.page_link("pages/testing.py", label="Chat", icon="💬")
+                st.page_link("pages/noise_lesson.py", label="Chat", icon="💬")
 
 if __name__ == "__main__":
     main()
