@@ -1,7 +1,7 @@
 # SoundX
 
 <!--
-![GitHub Logo](/Image1.png) 
+![GitHub Logo](/SoundX.png) 
 -->
 ![Alt Text](/streamlit-audio2-2024-04-27-19-04-16.webm)
 
@@ -62,5 +62,5 @@ The app helps mitigate the adverse effects of noise pollution, thereby enhancing
 ![GitHub Logo](/Untitled.png) 
 
 <!--
-[![IMAGE ALT TEXT HERE](/CASExplorer.png)](https://youtu.be/Sa3w50Kn6TY)
+[![IMAGE ALT TEXT HERE](/SoundX.png)](https://www.youtube.com/watch?v=ITcKi5RhCys)
 -->
