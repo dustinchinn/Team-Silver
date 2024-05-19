@@ -1,4 +1,4 @@
-# Team Sliver
+# SoundX
 
 <!--
 ![GitHub Logo](/Image1.png) 
