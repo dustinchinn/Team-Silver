@@ -3,7 +3,7 @@
 <!--
 ![GitHub Logo](/Image1.png) 
 -->
-![Alt Text](/demo.gif)
+![Alt Text](/streamlit-audio2-2024-04-27-19-04-16.webm)
 
 ##
 
@@ -15,7 +15,7 @@ Chatbot that assists those experiencing significant noise pollution in the city 
 
 **SoundX** (*Pronounced as “Sound X”*):
 
-An application that helps the user directly address their issues, and report said issue to local city developers.
+An application that helps the user directly address their issues and report said issue to local city developers.
 
 ## Why SoundX? 
 
