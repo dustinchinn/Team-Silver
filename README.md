@@ -41,10 +41,10 @@ The app helps mitigate the adverse effects of noise pollution, thereby enhancing
 [![Watch the video](youtube.jpg)](https://youtu.be/ITcKi5RhCys) 
 
 ## Brain storming
-![GitHub Logo](/Image1.jpg) 
+![GitHub Logo](/Image1) 
 
 ## Features
-![GitHub Logo](/Image2.jpg) 
+![GitHub Logo](/Image2) 
 **F1** (*Noise Reporter*):
 - Users record surrounding noise
 - Audio recording analysis
@@ -52,7 +52,7 @@ The app helps mitigate the adverse effects of noise pollution, thereby enhancing
 - Recommendation based on user data
 
 **F2** (*Chatbot*):
-![GitHub Logo](/Image3.jpg) 
+![GitHub Logo](/Image3) 
 - Chatbot will automatically give the user suggestions based on report feedback
 - Chatbot can answer any questions related to noise and provide resources
 
