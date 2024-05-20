@@ -25,9 +25,9 @@ This collective data not only raises awareness of noise pollution issues but als
 
 ## Our Solution
 
-SoundX aimed to create an app that addresses urban noise pollution by measuring and analyzing sound levels, offering users real-time insights and tailored recommendations for noise reduction.
-We tackled challenges related to user privacy, data security, and the accuracy of noise detection. 
-We delivered a reliable and user-friendly solution by implementing strong ethical safeguards and by encouraging effective team collaboration.
+SoundX aims to create an app that addresses urban noise pollution by measuring and analyzing sound levels, offering users real-time insights and tailored recommendations for noise reduction.
+We tackle challenges related to user privacy, data security, and the accuracy of noise detection. 
+We delivere a reliable and user-friendly solution by implementing strong ethical safeguards and by encouraging effective team collaboration.
 The app helps mitigate the adverse effects of noise pollution, thereby enhancing urban living conditions and promoting public health.
 
 ## See Our Demo Video
