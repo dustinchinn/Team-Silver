@@ -25,10 +25,15 @@ This collective data not only raises awareness of noise pollution issues but als
 
 ## Our Solution
 
-SoundX aims to create an app that addresses urban noise pollution by measuring and analyzing sound levels, offering users real-time insights and tailored recommendations for noise reduction.
-We tackle challenges related to user privacy, data security, and the accuracy of noise detection. 
-We deliver a reliable and user-friendly solution by implementing strong ethical safeguards and by encouraging effective team collaboration.
-The app helps mitigate the adverse effects of noise pollution, thereby enhancing urban living conditions and promoting public health.
+SoundX is a conceptual application that addresses urban noise pollution by measuring and analyzing sound levels, offering users real-time insights and tailored recommendations for noise reduction. Currently, there are two main features of the app. The first being a noise recording function that records noise around the user, analyzes the noise, enters the noise data into a centralized database, gives the user recommondations based on the noise data, as well as giving the option to report the noise data to people that can make a positive difference such as data analysts and city planners. The second function of the app is a chatbot that is integrated with the noise data recorder function by automatically giving the user suggestions based on the noise data report. It can also answer any questions related to noise and provide helpful resources. Some issues we've taken into consideration include ethical concerns with privacy, data security, intellectual property, as well as accuracy and reliability. Here are some actions we took to mitigate these issues:
+
+To mitigate privacy risks associated with location data, we use anonymization techniques such as data aggregation and pseudonymization, ensuring that individual users cannot be identified. Additionally, implementing robust encryption methods can protect data during transmission and storage, making it inaccessible to unauthorized parties.
+
+Data security can be enhanced by employing multi-factor authentication, regular security audits, and implementing firewalls and intrusion detection systems. These measures help prevent unauthorized access and breaches. Regularly updating software and systems to address vulnerabilities is also crucial.
+
+To address intellectual property concerns, we provide comprehensive training for data analysts on copyright laws and guidelines for handling copyrighted content. Additionally, implementing automated systems to flag potential copyright violations can help prevent unauthorized recordings.
+
+Ensuring the accuracy and reliability of user-reported data can be achieved by providing detailed and clear instructions on data collection methods. Regular training sessions and quality control checks can further ensure that data is recorded correctly. Implementing automated validation systems can also help verify the accuracy of the collected data, reducing the likelihood of errors.
 
 ## See Our Demo Video
 [![Watch the video](https://img.youtube.com/vi/ITcKi5RhCys/maxresdefault.jpg)](https://youtu.be/ITcKi5RhCys) 
