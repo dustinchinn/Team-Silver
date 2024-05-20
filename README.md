@@ -33,9 +33,6 @@ The app helps mitigate the adverse effects of noise pollution, thereby enhancing
 ## See Our Demo Video
 [![Watch the video](https://img.youtube.com/vi/ITcKi5RhCys/maxresdefault.jpg)](https://youtu.be/ITcKi5RhCys) 
 
-## Brain storming
-![GitHub Logo](/Images/IBM_Enterprise_Design_Map.png) 
-
 ## Features
 ![GitHub Logo](/Images/SoundX_Noise_Data_Recorder.png) 
 **F1** (*Noise Reporter*):
@@ -45,10 +42,12 @@ The app helps mitigate the adverse effects of noise pollution, thereby enhancing
 - Recommendation based on user data
 
 **F2** (*Chatbot*):
-![GitHub Logo](/Image3/Noise_Exposure_Education_Tool_Screenshot.png) 
+![GitHub Logo](/Images/Noise_Exposure_Education_Tool_Screenshot.png) 
 - Chatbot will automatically give the user suggestions based on report feedback
 - Chatbot can answer any questions related to noise and provide resources
 
+## Brain storming
+![GitHub Logo](/Images/IBM_Enterprise_Design_Map.png) 
 
 ## Creating Logo
 
